@@ -1,0 +1,7 @@
+sample:
+  description: Zephyr application sample showcasing some structuring approaches for different kinds of file types used directly or along with Zephyr platform. 
+    application
+  name: zephyr application structuring example
+common:
+    tags: introduction
+
