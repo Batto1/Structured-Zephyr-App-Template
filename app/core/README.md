@@ -1,5 +1,5 @@
 ## Brief
-'core' folder is the folder where all the application specific files are kept. These files implement special algorithms, and functionality specific to the application.
+'core' folder is the folder where all the application specific files are kept. Special algorithms, and functionality specific to the application is implemented here.
 
 ## Portability of Code
 These files implement special algorithms, and functionality specific to the application thus is not directly portable. 
