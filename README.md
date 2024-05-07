@@ -1,8 +1,7 @@
 ## Structured Zephyr Application Template
 
-
 ### Overview
-This is a template for applications being developed on [Zephyr platform][zephyr_platform] that showcases somewhat more advanced file structuring that can be useful for achievening a more intiutive and better handled software files such that foldering and categorising the files itself doesn't create any overhead on the development. Furthermore it's aimed that development files can be easily explored in every stage of project by any familiar or unfamiliar developer working on the project. 
+This is a template for applications being developed on [Zephyr RTOS platform][zephyr_platform] that showcases somewhat more advanced file structuring that can be useful for achievening a more intiutive and better handled software files such that foldering and categorising the files itself doesn't create any overhead on the development. Furthermore it's aimed that development files can be easily explored in every stage of project by any familiar or unfamiliar developer working on the project. 
 
 [zephyr_platform]: https://github.com/zephyrproject-rtos/zephyr
 
@@ -11,18 +10,19 @@ Based on the reasoning and thoughts I provided in "Some Arguments and Philosophy
 - Every necessary file gathered together and separated from the others are called modules. Modules have every necessary one files such as source and header files along with their related configuration files, README and other documents.
 - Modules should have their own necessary files (CMakeList, Kconfig, README and other documents) beside them. Parent folder's CMakeList and Kconfig should have the control to include them or not such that modules are easily included or excluded. With this, we distribute the control of file hierarchy to modules themselves rather than a central place ('central place' such that having only one CMakeList or Kconfig or prj.conf to make all configurations). 
 - For the sake of easier accessibility to a module's file, it's chosen to categorize less for some modules such as 'main_processor' under 'app>hw_modules' although it could make sense to be in the 'onboard' folder.
-- All modules that make the logic, define configuration, configure and help build and describe the module and make of the application; they originate from one folder called **'app'**. 'app' folder contains following folders:
-     - **'core'** -> Application specific files kept here. Special algorithms, and functionality specific to the application is implemented here.
+- All modules that make the logic, define configuration, configure and help build and describe the module and make of the application; they originate from one folder called **'app'**. 'app' folder contains following folders, not all of them are necessary and can be removed depending on the application requirements and further information is given in README files inside the folders:
+     - **'core'** -> Application specific files are kept here. Special algorithms, and functionality specific to the application is implemented here.
      - **'external_interfaces'** -> Files for defining and implementing interfaces between other defined parts of a larger system that the application is a part of, is kept here if there exist such system.
      - **'hw_modules'** -> Files for some individual hardware's software files such as drivers are kept here. HW modules have some independent function than other HW modules in the system and interface with other HW modules by some specified interface.
           - **'detachable'** -> HW module software files for detachable hardware are kept here, if any exist.
           - **'main_processor'** -> HW module software files for main processor are kept here. Main processor is referred as the IC such as MCU, SoC or SiP that the application itself is built for.
           - **'onboard'** -> HW module software files for hardware that are on the board indefinitely are kept here, if any exist.
      - **'sw_modules'** -> Software modules are referred as some code with different individual functionality that don't depend on and not specificly written for an application (i.e. libraries). Software modules are kept in this folder.
+- If C++ is used and some abstraction and/or wrapper software is written over C libraries, they should also reside inside the module and give proper C++ interfaces to users. If the C++ software itself doesn't belong to a module or can be accepted as a module itself, the folder namings should give hint that C++ is used to wrap around C code (i.e. a folder for wrapping around Zephyr RTOS C APIs could be named zephyr_cpp and inside folder can reside some other folders such as zephyr_abstraction_layer and zephyr_wrappers).
 - Configurations that are specific to the application core (i.e. device name, network parameters etc.) and configurations that are generally commonly used by other applications (i.e. enable/disable I2C config) originate from one folder called **'conf'**. This file contains files with file extension '.conf' and are selected to be included int he build environment in CMakeLists.txt files. 'conf' file contains two other folders called:
      - **'core'** -> contains configuration selection files specific to the application core.
-     - **'common'**. -> contains configurations that can be commonly used by other application.  
-- Every document that doesn't explain the module itself originate from one folder called **'doc'**
+     - **'common'**. -> contains configuration selection files that can be commonly used by other application.  
+- Every document that doesn't explain some module in its own related folders are stored in folder called **'doc'**. Generally, documents in here are concerned with the application as a whole.
 - A **'boards'** folder exists optionally if the application will run on a custom board. Application is built to run in this board. Files exist for an example custom board, you should make appropriate changes to this folder's files according to your own custom board if it exists. (Note: 'Board' term is the Zephyr's choice and I referred to it as 'main processor' in wherever it's applicable.)
 - A **CMakeLists.txt** file exists at the root of the application directory. It's function is to make necessary central configurations and add "app" as subdirectory so that other CMakeLists.txt on the folder tree can be included.  
 - A **Kconfig** file exists at the root of the application directory. It's function is to make necessary central configurations and add "app" as subdirectory so that other Kconfig on the folder tree can be included.  
@@ -48,7 +48,7 @@ Here are the steps:
 1. Clone this repo
 2. Examine the file structure and be familiar with it
 3. Make necessary changes to structure according to your project
-4. Stick to the structuring as you keep adding files, folders, configurations etc.
+4. Stick to the structuring principles as you keep adding files, folders, configurations etc.
 
 
 ### Building and Running

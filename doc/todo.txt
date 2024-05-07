@@ -1,4 +1,4 @@
-- complete writing all readmes.
-- cmakelists connections
-- Kconfig connections
-- A couple of example configurations in conf file and include them with Cmake. Write the board name configuration in a .conf file in conf folder.
+- (done) complete writing all readmes. 
+- (done) cmakelists subdirectory connections
+- (done) Kconfig subdirectory connections
+- (done) A couple of example configurations in custom conf files and include them through CMake

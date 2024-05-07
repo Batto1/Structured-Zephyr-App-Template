@@ -1,8 +1,34 @@
 # SPDX-License-Identifier: Apache-2.0
 
+
 cmake_minimum_required(VERSION 3.20.0)
 
-find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
-project(hello_world_original)
+## !!!
+## WARNING: After setting new configuration files, delete the build file and create a build configuration again 
+## !!!
 
+ # add_subdirectory(conf) # it's found out that this doesn't work correctly when you make nested CMakeLists.txt files like it's made in 'app' folder and then set the configuration files. So Instead they're set here.
+
+# Below configuration setting has to be made before "find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})" line.
+# set one setting first. It's the prj.conf because otherwise it's omitted. 
+set(CONF_FILE "prj.conf")
+# and then follow the syntax given below
+set(CONF_FILE "${CONF_FILE};conf/common/example-conf1.conf")
+set(CONF_FILE "${CONF_FILE};conf/common/example-conf2.conf")
+
+
+find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
+project(structured_zephyr_app_template)
+
+# adding subdirectory to reach other CMakeLists.txt files in other nested files.
+add_subdirectory(app)
+
+# below is the line for conditinally adding a subdirectory depending on a configuration
+# add_subdirectory_ifdef(CONFIG_CUSTOM_CONFIG_EXAMPLE app)
+
+
+# main.c will be targeted in app > core directory thus below line is commented out.
 # target_sources(app PRIVATE src/main.c)
+
+
+
