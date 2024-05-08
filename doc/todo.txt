@@ -1,4 +1,0 @@
-- (done) complete writing all readmes. 
-- (done) cmakelists subdirectory connections
-- (done) Kconfig subdirectory connections
-- (done) A couple of example configurations in custom conf files and include them through CMake
