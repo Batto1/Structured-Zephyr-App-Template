@@ -19,11 +19,13 @@ Based on the reasoning and thoughts I provided in "Some Arguments and Philosophy
           - **'onboard'** -> HW module software files for hardware that are on the board indefinitely are kept here, if any exist.
      - **'sw_modules'** -> Software modules are referred as some code with different individual functionality that don't depend on and not specificly written for an application (i.e. libraries). Software modules are kept in this folder.
 - If C++ is used and some abstraction and/or wrapper software is written over C libraries, they should also reside inside the module and give proper C++ interfaces to users. If the C++ software itself doesn't belong to a module or can be accepted as a module itself, the folder namings should give hint that C++ is used to wrap around C code (i.e. a folder for wrapping around Zephyr RTOS C APIs could be named zephyr_cpp and inside folder can reside some other folders such as zephyr_abstraction_layer and zephyr_wrappers).
-- Configurations that are specific to the application core (i.e. device name, network parameters etc.) and configurations that are generally commonly used by other applications (i.e. enable/disable I2C config) originate from one folder called **'conf'**. This file contains files with file extension '.conf' and are selected to be included int he build environment in CMakeLists.txt files. 'conf' file contains two other folders called:
+- Configurations that are specific to the application core (i.e. device name, network parameters etc.) and configurations that are generally commonly used by other applications (i.e. enable/disable I2C config) originate from one folder called **'conf'**. This file contains files with file extension '.conf' and are selected to be included int he build environment in CMakeLists.txt files. 'conf' folder contains the following files:
      - **'core'** -> contains configuration selection files specific to the application core.
      - **'common'**. -> contains configuration selection files that can be commonly used by other application.  
 - Every document that doesn't explain some module in its own related folders are stored in folder called **'doc'**. Generally, documents in here are concerned with the application as a whole.
-- A **'boards'** folder exists optionally if the application will run on a custom board. Application is built to run in this board. Files exist for an example custom board, you should make appropriate changes to this folder's files according to your own custom board if it exists. (Note: 'Board' term is the Zephyr's choice and I referred to it as 'main processor' in wherever it's applicable.)
+- A **'boards'** folder exists optionally if the application will run on a custom board or includes overlay files. Application is built to run in this board. Files exist for an example custom board and you should make appropriate changes to this folder's files according to your own custom board. (Note: 'Board' term is the Zephyr's choice for the IC that the application is built for and I referred to it as 'main processor' in wherever it's applicable.). boards folder contains the following files:
+     - ***'architecture_name'*** -> contains custom board devicetree files.
+     - **'overlays'**. -> contains devicetree overlay files.
 - A **CMakeLists.txt** file exists at the root of the application directory. It's function is to make necessary central configurations and add "app" as subdirectory so that other CMakeLists.txt on the folder tree can be included.  
 - A **Kconfig** file exists at the root of the application directory. It's function is to make necessary central configurations and add "app" as subdirectory so that other Kconfig on the folder tree can be included.  
 - A **prj.conf** file exist although all production configuration should reside in 'conf'. But it's kept for trying out configurations switfly and quickly directing a developer that's not familiar with the file structure to the 'conf' file to find configurations he's looking for, with the help of comment lines written inside.,
@@ -33,7 +35,7 @@ Based on the reasoning and thoughts I provided in "Some Arguments and Philosophy
 Modularised, readable, scalable, maintainable software projects generally require meticulous foldering and categorization of files. Applications developed on Zephyr RTOS is not any different and Zephyr platform also requires special attention on different kinds of files other than source files such as: 
 - configuration files (KConfig)
 - configuration selection files (.conf)
-- devicetree related files (.dts, .dtsi, .yaml etc.)
+- devicetree related files (.dts, .dtsi, .yaml, .overlay etc.)
 - CMake files (CMakeLists.txt)
 
 Also, depending on the application requirements and preferences of the development team, there can exist other kinds folders and files such as:

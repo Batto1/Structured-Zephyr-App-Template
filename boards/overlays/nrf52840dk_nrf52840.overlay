@@ -1,0 +1,118 @@
+/**
+ * To get started, press Ctrl+Space to bring up the completion menu and view the available nodes.
+ *
+ * For more help, browse the DeviceTree documentation at https://docs.zephyrproject.org/latest/guides/dts/index.html
+ */
+
+
+/* disables some nodes as an example. You can observe zephyr.dts output file to see affected changes. */
+/ {
+	/* These aliases are provided for compatibility with samples */
+	aliases {
+		/delete-property/ led0;
+		/delete-property/ sw0;
+		/delete-property/ bootloader-led0;
+		/delete-property/ mcuboot-button0;
+		/delete-property/ mcuboot-led0;
+	};
+};
+
+/delete-node/ &led0;
+/delete-node/ &button0;
+
+
+
+
+&adc {
+	status = "okay";
+};
+
+
+// nRFx SoC temperature sensor.
+&temp {
+     status = "disabled";
+ };
+
+/ {
+    
+	zephyr,user {
+		io-channels = <&adc 0>;
+	};
+};
+
+&adc {
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	channel@0 {
+		reg = <0>;
+		zephyr,gain = "ADC_GAIN_1_6";
+		zephyr,reference = "ADC_REF_INTERNAL";
+		zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+		zephyr,input-positive = <NRF_SAADC_AIN6>; /* P0.30 = AIN6 */
+          // zephyr,input-positive = <NRF_SAADC_AIN1>; /* P0.03 */
+          // zephyr,input-positive = <NRF_SAADC_AIN7>; /* P0.31 */
+		zephyr,resolution = <12>;
+	};
+
+	// // ### oversampled
+	// channel@1 {
+	// 	reg = <1>;
+	// 	zephyr,gain = "ADC_GAIN_1_6";
+	// 	zephyr,reference = "ADC_REF_INTERNAL";
+	// 	zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+	// 	zephyr,input-positive = <NRF_SAADC_AIN2>; /* P0.04 */
+	// 	zephyr,resolution = <14>;
+	// 	zephyr,oversampling = <8>;
+	// };
+
+	// channel@2 {
+	// 	reg = <2>;
+	// 	zephyr,gain = "ADC_GAIN_1_6";
+	// 	zephyr,reference = "ADC_REF_INTERNAL";
+	// 	zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+	// 	zephyr,input-positive = <NRF_SAADC_VDD>;
+	// 	zephyr,resolution = <14>;
+	// 	zephyr,oversampling = <8>;
+	// };
+
+};
+
+
+
+&pinctrl {
+	
+	spi2_default: spi2_default {
+		group1 {
+			psels = <NRF_PSEL(SPIM_SCK, 0, 2)>,
+				<NRF_PSEL(SPIM_MOSI, 0, 3)>,
+				<NRF_PSEL(SPIM_MISO, 0, 29)>;
+		};
+	};
+
+	spi2_sleep: spi2_sleep {
+		group1 {
+			psels = <NRF_PSEL(SPIM_SCK, 0, 2)>,
+				<NRF_PSEL(SPIM_MOSI, 0, 3)>,
+				<NRF_PSEL(SPIM_MISO, 0, 29)>;
+			low-power-enable;
+		};
+	};
+};
+
+
+&spi2 {
+	compatible = "nordic,nrf-spi";
+    status= "okay";
+	pinctrl-0 = <&spi2_default>;
+	pinctrl-1 = <&spi2_sleep>;
+	pinctrl-names = "default", "sleep";
+    cs-gpios = <&gpio0 28 GPIO_ACTIVE_LOW>;
+    bme280@0 {
+        compatible = "bosch,bme280";
+        reg = <0x0>;
+        spi-max-frequency = <1000000>;   
+        label = "BME280";
+
+    };
+};

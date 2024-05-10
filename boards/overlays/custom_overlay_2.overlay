@@ -1,0 +1,16 @@
+/**
+ *  Custom dummy overlay example to see how its included into the build in CMakeLists.txt
+ */
+
+
+
+ /* disables some nodes as an example. You can observe zephyr.dts output file to see affected changes. */
+/ {
+	/* These aliases are provided for compatibility with samples */
+	aliases {
+		/delete-property/ led2;
+	};
+};
+
+/delete-node/ &led2;
+
